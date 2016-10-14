@@ -1,13 +1,15 @@
 {
   "pages":[
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/logs/logs",
+    "pages/play/play"
   ],
   "window":{
     "backgroundTextStyle":"light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "某易云音乐",
-    "navigationBarTextStyle":"black"
+    "navigationBarTitleText": "音乐",
+    "navigationBarTextStyle":"black",
+    "enablePullDownRefresh":"true"
   },
   "tabBar": {
     "list": [{
@@ -16,7 +18,7 @@
       "selectedIconPath": "images/m2.png",
       "text": "音乐"
     }, {
-      "pagePath": "pages/logs/logs",
+      "pagePath": "pages/user/user",
       "iconPath": "images/u1.png",
       "selectedIconPath": "images/u2.png",
       "text": "用户"

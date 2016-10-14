@@ -1,0 +1,13 @@
+
+.upload{
+    height: 100rpx;
+    line-height: 100rpx;
+}
+.recent{
+    height: 100rpx;
+    line-height: 100rpx;
+}
+.iNew{
+    height: 100rpx;
+    line-height: 100rpx;
+}

@@ -1,4 +1,4 @@
-//app.js
+//app.js made by compass follow me https://github.com/pagnkelly
 App({
   onLaunch: function () {
     //调用API从本地缓存中获取数据

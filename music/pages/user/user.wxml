@@ -1,0 +1,5 @@
+<view class="list">
+    <view class="item" bindtap="upload">下载音乐</view>
+    <view class="item" bindtap="recent">最近播放</view>
+    <view class="item" bindtap="iNew">我创建的歌单</view>
+</view>

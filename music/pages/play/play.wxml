@@ -1,0 +1,25 @@
+
+<view class="play">
+    <view class="songname">{{name}}</view>
+    <view class="lyrics">{{lyrics}}</view>
+    <view class="progress">
+        <text class="txt">{{startTime}}</text>
+        <slider class="slider" min="0" max="269" step="1" value="{{playTime}}" bindchange="seek"></slider>
+        <text class="txt">{{endTime}}</text>
+    </view>
+    <view class="controls">
+        <view class="btn" bindtap='playmode'>
+            <view class="image-wrap" wx:if="{{mode=='all'}}"><image style="width:100%; height: 100%;" src="resources/all.png"></image></view>
+            <view class="image-wrap" wx:if="{{mode=='single'}}"><image style="width:100%; height: 100%;" src="resources/single.png"></image></view>
+            <view class="image-wrap" wx:if="{{mode=='random'}}"><image style="width:100%; height: 100%;" src="resources/random.png"></image></view>
+        </view>
+        <view class="btn"  bindtap='prev'><image style="width:100%; height: 100%;" src="resources/prev.png"></image></view>
+        <view class="btn">
+           <view class="image-wrap" wx:if="{{playstate=='play'}}" bindtap='play'><image style="width:100%; height: 100%;" src="resources/play.png"></image></view>
+           <view class="image-wrap" wx:if="{{playstate=='pause'}}" bindtap='pause'><image style="width:100%; height: 100%;" src="resources/pause.png"></image></view>
+        </view>
+        <view class="btn"  bindtap='next'><image style="width:100%; height: 100%;" src="resources/next.png"></image></view>
+        <view class="btn"  bindtap='list'><image style="width:100%; height: 100%;" src="resources/list.png"></image></view>
+    </view>
+</view>
+<view class="bg" ><image style="width:100%; height: 100%;" src="{{poster}}"></image></view>
