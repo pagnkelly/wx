@@ -1,9 +1,22 @@
-<!--index.wxml-->
+<!--listInfo.wxml-->
 
 <scroll-view scroll-y="true" class="main" bindscrolltolower="onPullDownRefresh">
+    <view class="banner clearfix">
+        <image></image>
+        <view class="banner-info">
+            <text>sdsada</text>
+            <text>ddddddd</text>
+        </view>
+    </view>
+    <view class="playAll clearfix">
+        <image src="resources/playall.png" ></image>
+        <text>播放全部</text>        
+    </view>
     <block wx:for="{{music}}">
         <view class="cell" bindtap="handleCell" data-id="{{index}}">
+            <view class="id">{{index+1}} 、</view>
             <view class="info">
+                
                 <view class="name">{{item.name}}</view>
                 <view class="author">{{item.author}}</view>
             </view>

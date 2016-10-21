@@ -1,5 +1,31 @@
 <view class="list">
-    <view class="item" bindtap="upload">下载音乐</view>
-    <view class="item" bindtap="recent">最近播放</view>
-    <view class="item" bindtap="iNew">我创建的歌单</view>
+    <view class="item" bindtap="download">
+        <image src='./resources/download.png' ></image>
+    下载音乐
+        <text class="item-info">{{}} ></text>
+    </view>
+    <view class="item" bindtap="recent">
+        <image src='./resources/recent.png' ></image>
+    最近播放
+         <text class="item-info">{{}} ></text>
+    </view>
+    <view class="item" bindtap="iNew">
+        <image src='./resources/iNew.png' ></image>
+    我创建的歌单
+         <text class="item-info">{{listNum}} ></text>
+    </view>
+    <block wx:for="{{songList}}" wx:for-item="item">
+        <template is="msgItem" data="{{item,animationData}}"/>
+    </block>
 </view>
+
+<template name="msgItem">
+  <view  class="songList" bindtap="openList" data-name="{{item.name}}">
+    <image class="songList-img"></image>
+    <view class="songList-text">
+        <text> {{item.name}} </text>
+        <text> {{item.len}}首 已下载{{index}}首 </text>
+    </view>
+    
+  </view>
+</template>

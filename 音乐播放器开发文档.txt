@@ -1,0 +1,95 @@
+这份文档是开发了几天后写的，有些细节忘了，好吧就这样。
+首先建立了两个Page，音乐和用户，建立了tabbar
+首先想了首页的架构，每条我就显示歌曲名字和歌手就行，通过自己定义的一些数据渲染。
+添加了更多功能，主要用到了action-sheet，通过hidden属性控制隐藏显示，主要有收藏到歌单，下载，分享功能。
+单击歌曲我进行了跳转，在其他页面播放歌曲，构筑了play页面，跳转也学习了很久，我想带参数过去，分别有name poster src author 发现每次只能传三个过去
+就是以url+？+属性名+值，发现poster怎么都穿不过去，后来我把这些内容粘到txt里发现正正好好4kb！！！！蛋疼中。。。好像行不通了。就重新大改了一下。把数组单独写个
+js，每次用就require一下，解决了这个问题。
+再就是找播放icons花了好多时间，个人开发真苦逼，前后台美工都一体，最后还是丑丑的，弄不到一整套icons。
+然后碰到了播放之后，暂停，再播放就重新播放了，看了api研究了例子很长时间，好像是没写seek的缘故，现在准备试一试。
+2016.10.13
+升级了工具，页面塌了，首先想到flex，我之前解决了啊，怎么又成了这样
+至于原因我不知道，忘记当时怎么做的了，现在还好解决了
+page{
+    height:100%;
+}.play{
+    height: 100%;
+    display:-webkit-box;
+    -webkit-box-orient: vertical; 
+        
+}
+.songname{
+    text-align: center;
+    height: 100rpx;
+    line-height: 100rpx;
+}
+.lyrics{
+    box-flex:1;
+    -webkit-box-flex:1;
+    text-align: center;
+    width: 100%;
+}.progress{
+    height: 76rpx;
+    display: flex;
+}
+.controls{
+    height: 200rpx;
+    line-height: 200rpx;
+    display:flex;  
+}
+用的display：box就好用了。主要是垂直两头固定，中间自适应。
+后来在群里看到是因为更新把page的高度百分百去掉了。
+播放问题解决了，获取播放进度，然后用seek加上就行了，要注意获取播放进度一定要播放着歌曲才能获得，
+我播放进度条是slider这个微信封装的组件，然后通过计时器，不断的更改playTime,把它填到slider的value里就实现了，
+现在要做的是，有个时间进度，估计也会用到计时器，写在那里就好了，还要format下时间，在util里写就好了，方便以后调用，现在不想写，看会书，听会音乐。
+2016.10.14
+今天没什么活，可以尽情开发了，新建了一个user页，可以展示我的歌单列表。还包括下载音乐，最近播放。花了一上午把页面基本架构搭建出来，下一步写js。完善功能。
+利用接口数据缓存 wx.getStorageSync(KEY) wx.setStorage(OBJECT) 这个分同步异步，看你需要，解决了如果点击相同音乐的话，就不会重新播放，而是继续播放
+2016.10.17今天想写一个动画，点击我的歌单，下滑出来一堆歌单，简单的试了一下，很容易的出现了效果。但是现在遇到了一个问题，有关于数据存储，少量数据可以调用官方api，但是大量
+的数据或者我想保存的用户信息如何访问我外界的数据库存起来呢。这个问题真的怎么搜也搜不到。
+https://www.qcloud.com/doc/product/448/6404 还没来及看，貌似能解释上诉问题，
+2016.10.18
+今天遇到了target和currentTarget的坑，我想在“更多”【。。。】就是这个图片的单击事件中传入歌曲的id，俺的wxml结构是这样的
+<block wx:for="{{music}}">
+ 
+<view class="cell" bindtap="handleCell" data-id="{{index}}">
+ 
+ <view class="info">
+         
+       <view class="name">{{item.name}}</view>
+     
+           <view class="author">{{item.author}}</view>
+ 
+           </view>
+      
+      <view class="more" catchtap="handleMore" data-id="{{index}}">
+      
+          <image style="width:100%; height: 100%;" src="resources/more.png"></image>
+   
+         </view>
+   
+     </view>
+  
+</block>
+<action-sheet hidden="{{actionSheetHidden}}" bindchange="actionSheetChange">
+      
+  
+     <action-sheet-item class="item" bindtap="bindItemTap" data-currid="{{currentid}}">收藏到歌单</action-sheet-item>
+       
+       <action-sheet-item class="item" bindtap="bindItemTap" data-currid="{{currentid}}">下载</action-sheet-item>
+     
+       <action-sheet-item class="item" bindtap="bindItemTap" data-currid="{{currentid}}">分享</action-sheet-item>
+     
+       <action-sheet-cancel class="cancel">取消</action-sheet-cancel>
+   
+</action-sheet> 
+我单击更多并得不到index，我用的是e.target.dataset,最后我改成     e.currentTarget.dataset 就好使了，也是碰到了死耗子，我并没有事先懂得原理改的，
+而是碰巧试出来的，仔细想了一下，原来我点的是image，冒泡到view接收到了。新技能get。。。。
+小坑：action-sheet放入block中直接给currid传index不就好了，非得那么麻烦。实则不然，牵一发动全身的hidden属性。我开始设想用数组来改变，遇到了一堆坑，我退却了，这么麻烦
+肯定不是最优解。学会放弃，save time。
+2016.10.19
+今天开发的是添加新歌单这个功能，逻辑比较复杂。多思考就解决了。因为没有连外界，所以用的是本地存储存歌单。。。。对于{}判断有没有值学习到了。
+然后写了把歌曲添加到歌单，今天至今没遇到坑。
+2016.10.20
+歌单详细列表的开发完毕。request接口并不知道去请求谁，一开始就打算的是本地的，但是还是想连上其他资源的。整的没有动力了，开发完也是个单机小demo，一点也不高大上。哎~~~~
+prev遇到问题，不知是我逻辑错误还是相同url的问题，歌曲总是不重头播，好像播放了很多背景音乐

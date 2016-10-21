@@ -1,8 +1,12 @@
 {
   "pages":[
     "pages/index/index",
+    "pages/newList/newList",
     "pages/logs/logs",
-    "pages/play/play"
+    "pages/play/play",
+    "pages/user/user",
+    "pages/listInfo/listInfo"
+    
   ],
   "window":{
     "backgroundTextStyle":"light",

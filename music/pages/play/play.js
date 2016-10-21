@@ -13,14 +13,44 @@ Page({
     timer:"",
     playTime:"",
     startTime:"",
-    endTime:""
+    endTime:"",
+    max:100,
+    recentPlay:[],
+    curid:99999
   },
   onLoad:function(options){
     // 页面初始化 options为页面跳转所带来的参数
     var that=this;
     if(options){
       var music=song.getById(options.id);
-    
+      var recentPlay=wx.getStorageSync('recentPlay');
+      var arr=[];
+      
+      if(!recentPlay){
+       
+        arr.push(options.id)
+      }else{
+        arr=recentPlay;
+        for(var i=0;i<arr.length;i++){
+            if(arr[i]==options.id){
+              for(var j=i;j<arr.length-1;j++){
+                  arr[j]=arr[j+1];
+              }
+              arr.length=arr.length-1;
+              break;
+            }
+        }
+        
+        arr.push(options.id);
+      }
+      // recentPlay.push(options.id);
+      
+      wx.setStorage({
+        key:"recentPlay",
+        data:arr
+      })
+      this.data.curid=arr.length-1;
+      this.data.recentPlay=arr;
       this.data.name=music.name;
       this.data.src=music.src;
       this.data.author=music.author;
@@ -32,25 +62,31 @@ Page({
 
     
 
-    that.play();
+    that.play(options.id);
    
    
     
-    wx.getBackgroundAudioPlayerState({
+
+
+  },
+  onReady:function(){
+    var that=this;
+        wx.getBackgroundAudioPlayerState({
             success: function(res) {
                 var status = res.status;
                 var duration=res.duration;
                 var currentPosition = res.currentPosition;
+                
                 that.setData({
+                  max:parseInt(duration),
                   playTime:currentPosition,
                   startTime:util.formatTime(currentPosition),
                   endTime: util.formatTime(duration),
                   playstate:"pause"
                 });
+                console.log(111111)
             }
     })
-  },
-  onReady:function(){
     // 页面渲染完成
   },
   onShow:function(){
@@ -81,9 +117,12 @@ Page({
         });
     }
   },
-  play:function(){
+  play:function(id){
     var that=this;
-    wx.playBackgroundAudio({
+    var value = wx.getStorageSync('id')
+    if (value!=id) {
+        
+        wx.playBackgroundAudio({
                 dataUrl: this.data.src,
                 title: this.data.name,
                 complete:function(){
@@ -91,7 +130,13 @@ Page({
                     playstate:"pause"
                   });
                 }
-    });
+        });
+    }else{
+      that.setData({
+          playstate:"pause"
+      })
+    }
+    wx.setStorageSync("id",id);
     if(this.data.playTime){
          wx.seekBackgroundAudio({
           position: this.data.playTime,
@@ -103,12 +148,14 @@ Page({
   }, 
   seek: function (e) {
       var that = this;
+      
       wx.seekBackgroundAudio({
           position: e.detail.value,
           complete: function () {
-
+        
         }
      })
+   
   },
   pause:function(){
     clearInterval(this.data.timer);
@@ -118,7 +165,39 @@ Page({
         });
     
      wx.pauseBackgroundAudio();
+    console.log(this.data.max);
+  },
+  prev:function(){
+    var that=this;
+    var arr=this.data.recentPlay;
+    this.data.curid=this.data.curid-1;
+    console.log(arr[this.data.curid]);
+    clearInterval(this.data.timer);
    
+    var music=song.getById(arr[this.data.curid]);
+    this.setData({
+      name:music.name,
+      src:music.src,
+      author:music.author,
+      poster:music.poster
+    });
+ 
+
+    this.play(arr[this.data.curid]);
+     wx.getBackgroundAudioPlayerState({
+            success: function(res) {
+                var status = res.status;
+                var duration=res.duration;
+                var currentPosition = res.currentPosition;
+                that.setData({
+                  max:parseInt(duration),
+                  playTime:currentPosition,
+                  startTime:util.formatTime(currentPosition),
+                  endTime: util.formatTime(duration),
+                  playstate:"pause"
+                });
+            }
+    })  
   },
   _progressTimer:function(){
     var that=this;

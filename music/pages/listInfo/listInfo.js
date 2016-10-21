@@ -1,13 +1,13 @@
-//index.js
-//获取应用实例
 var song=require("../../libraries/song.js");
+
+
 
 Page({
   data: {
     actionSheetHidden: true,
     actionSheetHidden2:true,
     hidden:true,
-    music:song.music,
+    music:[],
     currentid:99999,
     songList:{},
     songListName:[],
@@ -15,8 +15,16 @@ Page({
     hid2:true
   },
   //事件处理函数
-  onLoad: function () {
-
+  onLoad: function (options) {
+      var name=options.name;
+      var list=wx.getStorageSync('songList');
+      var arr=[];
+      for(var i=0;i<list[name].length;i++){
+           arr.push(song.music[list[name][i]]);
+      }
+      this.setData({
+          music:arr
+      });
      
   },
   onPullDownRefresh:function(){

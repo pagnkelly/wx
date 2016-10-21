@@ -1,0 +1,14 @@
+ 
+ <view class="shell">
+    <input placeholder="请输入歌单名称"  bindblur="handleBlur"/>
+ </view> 
+ <button bindtap="handleSub">完成</button>
+ <toast hidden="{{hid}}" >
+    已添加到歌单
+ </toast>
+ <toast hidden="{{hid2}}" >
+    已存在歌单，请重新输入
+ </toast>
+ <toast hidden="{{hid3}}" >
+    歌单名不得为空
+ </toast>

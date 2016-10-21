@@ -4,7 +4,7 @@
     <view class="lyrics">{{lyrics}}</view>
     <view class="progress">
         <text class="txt">{{startTime}}</text>
-        <slider class="slider" min="0" max="269" step="1" value="{{playTime}}" bindchange="seek"></slider>
+        <slider class="slider" min="0" max="{{max}}" step="1" value="{{playTime}}" bindchange="seek"></slider>
         <text class="txt">{{endTime}}</text>
     </view>
     <view class="controls">

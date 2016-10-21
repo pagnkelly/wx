@@ -1,13 +1,51 @@
 
-.upload{
+.item{
     height: 100rpx;
     line-height: 100rpx;
+    position: relative;
+    text-indent: 100rpx;
+    border-bottom: 1px solid #aaa; 
 }
-.recent{
-    height: 100rpx;
-    line-height: 100rpx;
+.item image{
+    width:40rpx; 
+    height:40rpx;
+    position: absolute; 
+    top: 32rpx;
+    left: 40rpx;
 }
-.iNew{
-    height: 100rpx;
-    line-height: 100rpx;
+.item .item-info{
+    width:100rpx; 
+    height:40rpx;
+    position: absolute; 
+    top: 32rpx;
+    right: 40rpx;
+    font-size: 12rpx;
+    text-indent: 0rpx;
+    line-height: 40rpx;
+    color: #bbb;
+    text-align: right;
+}
+.songList{
+    width: 100%;
+    height: 50px;
+    background: #fff;
+  
+    border-bottom: 1px solid #ccc;
+}
+.songList-img{
+    width: 100rpx;
+    height: 50px;
+    background: #ccc;
+    position: absolute;
+    left: 0;
+}
+.songList-text{
+    width: 200rpx;
+    position: absolute;
+    left: 120rpx;
+}
+.songList-text text{
+    margin-top: 20rpx;
+    font-size: 12rpx;
+    display: block;
 }
