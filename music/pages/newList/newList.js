@@ -7,12 +7,15 @@ Page({
     hid2:true,
     hid3:true,
     songList:{},
-    inputValue:''
+    inputValue:'',
+    curName:''
   },
   onLoad: function (options) {
       this.setData({
-          id:options.id
+          id:options.id,
+          curName:options.name
       });
+   
       var that=this;
       wx.getStorage({
         key: 'songList',
@@ -67,10 +70,19 @@ Page({
             return !1;  
         return !0  
     } 
-    console.log(flag);
+    
     if(isEmptyObject(obj)||flag){
-      obj[inputValue]=[];
-       obj[inputValue].push(this.data.id);
+      var that=this;
+      if(this.data.id){
+           obj[inputValue]=[];
+            obj[inputValue].push(this.data.id);
+      }
+    
+     if(this.data.curName){
+       obj[inputValue]=obj[this.data.curName];
+       delete obj[this.data.curName];
+
+     }
       
       wx.setStorage({
         key:"songList",
@@ -81,7 +93,14 @@ Page({
         hid:false
       });
       setTimeout(function(){
+        // if(that.data.id){
           wx.navigateBack();
+        // }else{
+        //   wx.redirectTo({
+        //     url:'../user/user'
+        //   })
+        // }
+       
       },1000); 
     }
        

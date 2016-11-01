@@ -93,3 +93,19 @@ https://www.qcloud.com/doc/product/448/6404 还没来及看，貌似能解释上诉问题，
 2016.10.20
 歌单详细列表的开发完毕。request接口并不知道去请求谁，一开始就打算的是本地的，但是还是想连上其他资源的。整的没有动力了，开发完也是个单机小demo，一点也不高大上。哎~~~~
 prev遇到问题，不知是我逻辑错误还是相同url的问题，歌曲总是不重头播，好像播放了很多背景音乐
+2016.10.24
+大家程序员节快乐，可惜是苦逼的周一，今天学习到了动态删除对象中的属性。在我做歌单删除功能时遇到的。
+var objtest = {  
+    prop: 'delete me'  
+};  
+//或者这么声明的对象  
+var objtest = new Array();  
+objtest['prop'] = 'delete me';  
+//删除属性'prop'：  
+delete objtest.prop;  
+//或者  
+delete objtest['prop'];  
+  
+//还可以删除任意变量  
+var numb = 17;  
+delete numb;  

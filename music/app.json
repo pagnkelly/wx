@@ -5,7 +5,8 @@
     "pages/logs/logs",
     "pages/play/play",
     "pages/user/user",
-    "pages/listInfo/listInfo"
+    "pages/listInfo/listInfo",
+    "pages/recentPlay/recentPlay"
     
   ],
   "window":{

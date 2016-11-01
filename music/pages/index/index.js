@@ -32,10 +32,12 @@ Page({
   },
   handleCell:function(e){
     var id=e.target.dataset.id;
-     
-   wx.navigateTo({
-     url:'../play/play?id='+id
-   });
+   if(id){
+     wx.navigateTo({
+      url:'../play/play?id='+id
+    });
+   }
+   
     
   },
   handleMore:function(e){

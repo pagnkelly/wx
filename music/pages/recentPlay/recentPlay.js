@@ -1,52 +1,49 @@
-var song=require("../../libraries/song.js");
 
-var app=getApp();
+//获取应用实例
+var song=require("../../libraries/song.js");
 
 Page({
   data: {
     actionSheetHidden: true,
     actionSheetHidden2:true,
     hidden:true,
-    music:[],
+    music:song.music,
     currentid:99999,
     songList:{},
     songListName:[],
     hid:true,
-    hid2:true,
-    name:'',
-    poster:''
+    hid2:true
   },
   //事件处理函数
-  onLoad: function (options) {
-      var name=options.name;
-      var list=wx.getStorageSync('songList');
+  onLoad: function () {
+      var recentPlay=wx.getStorageSync('recentPlay');
       var arr=[];
-      for(var i=0;i<list[name].length;i++){
-           arr.push(song.music[list[name][i]]);
+      for(var i=recentPlay.length-1;i>=0;i--){
+          arr.push(song.music[recentPlay[i]])
       }
-      
       this.setData({
-          name:name,
-          music:arr,
-          poster:arr[0].poster
+          music:arr
       });
-    var that = this
-    //调用应用实例的方法获取全局数据
-    app.getUserInfo(function(userInfo){
-      //更新数据
-      that.setData({
-        userInfo:userInfo
-      })
-    })
-   
   },
- 
+  onPullDownRefresh:function(){
+    var self=this;
+    self.setData({
+      hidden:false
+    });
+    setTimeout(function(){
+      self.setData({
+        hidden:true
+      });
+    },1000);
+  },
   handleCell:function(e){
     var id=e.target.dataset.id;
-     
-   wx.navigateTo({
-     url:'../play/play?id='+id
-   });
+   if(id){
+     wx.navigateTo({
+      url:'../play/play?id='+id
+    });
+   }
+   
     
   },
   handleMore:function(e){

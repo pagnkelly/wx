@@ -8,7 +8,7 @@
                 <view class="author">{{item.author}}</view>
             </view>
             <view class="more" catchtap="handleMore" data-id="{{index}}">
-                <image style="width:100%; height: 100%;" src="resources/more.png"></image>
+                <image style="width:100%; height: 100%;" src="../../images/more.png"></image>
             </view>
         </view>
        

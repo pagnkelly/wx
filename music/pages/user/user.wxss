@@ -19,7 +19,7 @@
     position: absolute; 
     top: 32rpx;
     right: 40rpx;
-    font-size: 12rpx;
+    font-size: 25rpx;
     text-indent: 0rpx;
     line-height: 40rpx;
     color: #bbb;
@@ -29,13 +29,12 @@
     width: 100%;
     height: 50px;
     background: #fff;
-  
+    position: relative;
     border-bottom: 1px solid #ccc;
 }
 .songList-img{
     width: 100rpx;
     height: 50px;
-    background: #ccc;
     position: absolute;
     left: 0;
 }
@@ -46,6 +45,14 @@
 }
 .songList-text text{
     margin-top: 20rpx;
-    font-size: 12rpx;
+    font-size: 25rpx;
     display: block;
+}
+.more{
+    width: 64rpx;
+    height: 64rpx;
+    position: absolute;
+    top: 50%;
+    right: 20rpx;
+    margin-top:-32rpx;
 }

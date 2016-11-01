@@ -14,48 +14,28 @@ Page({
     playTime:"",
     startTime:"",
     endTime:"",
+    min:0,
     max:100,
     recentPlay:[],
-    curid:99999
+    recentMusic:[],
+    curid:99999,
+    actionSheetHidden:true,
+    judgeNext:false
   },
   onLoad:function(options){
     // 页面初始化 options为页面跳转所带来的参数
     var that=this;
-    if(options){
+               
+    if(options.id!="undefined"){
       var music=song.getById(options.id);
-      var recentPlay=wx.getStorageSync('recentPlay');
-      var arr=[];
+      this.updateStorage(options.id);
       
-      if(!recentPlay){
-       
-        arr.push(options.id)
-      }else{
-        arr=recentPlay;
-        for(var i=0;i<arr.length;i++){
-            if(arr[i]==options.id){
-              for(var j=i;j<arr.length-1;j++){
-                  arr[j]=arr[j+1];
-              }
-              arr.length=arr.length-1;
-              break;
-            }
-        }
-        
-        arr.push(options.id);
-      }
-      // recentPlay.push(options.id);
-      
-      wx.setStorage({
-        key:"recentPlay",
-        data:arr
-      })
-      this.data.curid=arr.length-1;
-      this.data.recentPlay=arr;
       this.data.name=music.name;
       this.data.src=music.src;
       this.data.author=music.author;
       this.data.poster=music.poster;
     }else{
+     
       wx.navigateBack();
     }
    
@@ -63,11 +43,57 @@ Page({
     
 
     that.play(options.id);
-   
-   
-    
+    wx.onBackgroundAudioStop(function(){
+          that.data.judgeNext=true;
+          that.next();
+          
+    });
+   //存歌曲信息
+
+      var arr2=[];
+      for(var i=this.data.recentPlay.length-1;i>=0;i--){
+          arr2.push(song.music[this.data.recentPlay[i]])
+      }
+      this.setData({
+          curid:0,
+          recentMusic:arr2
+      });
 
 
+  },
+  updateStorage:function(id){
+    var recentPlay=wx.getStorageSync('recentPlay');
+      var arr=[];
+      
+      if(!recentPlay){
+       
+        arr.push(id);
+
+      }else{
+        arr=recentPlay;
+        for(var i=0;i<arr.length;i++){
+            if(arr[i]==id&&i!=arr.length-1){
+              for(var j=i;j<arr.length-1;j++){
+                  arr[j]=arr[j+1];
+              }
+              arr.length=arr.length-1;
+              
+              break;
+            }
+        }
+        if(arr[arr.length-1]!=id){
+         arr.push(id);
+        }
+      }
+      // recentPlay.push(id);
+      
+      wx.setStorage({
+        key:"recentPlay",
+        data:arr
+      })
+      this.data.recentPlay=arr;
+      console.log(this.data.recentPlay);
+      
   },
   onReady:function(){
     var that=this;
@@ -84,7 +110,6 @@ Page({
                   endTime: util.formatTime(duration),
                   playstate:"pause"
                 });
-                console.log(111111)
             }
     })
     // 页面渲染完成
@@ -99,6 +124,11 @@ Page({
     clearInterval(this.data.timer);
    
     // 页面关闭
+  },
+  actionSheetChange: function(e) {
+    this.setData({
+      actionSheetHidden: !this.data.actionSheetHidden
+    })
   },
   playmode:function(){
     if(this.data.mode=="all"){
@@ -127,8 +157,8 @@ Page({
                 title: this.data.name,
                 complete:function(){
                     that.setData({
-                    playstate:"pause"
-                  });
+                      playstate:"pause"
+                  })
                 }
         });
     }else{
@@ -144,6 +174,7 @@ Page({
               }
           })
     }
+
     this._progressTimer();
   }, 
   seek: function (e) {
@@ -169,35 +200,79 @@ Page({
   },
   prev:function(){
     var that=this;
-    var arr=this.data.recentPlay;
-    this.data.curid=this.data.curid-1;
-    console.log(arr[this.data.curid]);
+    var arr=this.data.recentMusic;
+    this.data.curid=this.data.curid+1;
+    if(this.data.curid==this.data.recentPlay.length){
+      this.data.curid=0;
+    }
+    this.updateStorage(this.data.curid);
     clearInterval(this.data.timer);
-   
-    var music=song.getById(arr[this.data.curid]);
+  var music=arr[this.data.curid];
+ 
     this.setData({
       name:music.name,
       src:music.src,
       author:music.author,
-      poster:music.poster
+      poster:music.poster,
+      playTime:"",
+      min:0,
+      curid:this.data.curid
     });
+    this.play(this.data.curid);
  
-
-    this.play(arr[this.data.curid]);
-     wx.getBackgroundAudioPlayerState({
-            success: function(res) {
-                var status = res.status;
-                var duration=res.duration;
-                var currentPosition = res.currentPosition;
-                that.setData({
-                  max:parseInt(duration),
-                  playTime:currentPosition,
-                  startTime:util.formatTime(currentPosition),
-                  endTime: util.formatTime(duration),
-                  playstate:"pause"
-                });
-            }
-    })  
+  },
+  next:function(){
+    var that=this;
+    var arr=this.data.recentMusic;
+    if(this.data.mode=="random"){
+      this.data.curid=Math.floor(arr.length*Math.random());
+    }else if(this.data.judgeNext&&this.data.mode=="single"){
+      this.data.curid=this.data.curid;
+      this.data.judgeNext=false;
+    }else{
+      this.data.curid=this.data.curid-1;
+    }
+    if(this.data.curid==-1){
+      this.data.curid=this.data.recentPlay.length-1;
+    }
+    this.updateStorage(this.data.curid);
+    clearInterval(this.data.timer);
+  var music=arr[this.data.curid];
+ 
+    this.setData({
+      name:music.name,
+      src:music.src,
+      author:music.author,
+      poster:music.poster,
+      playTime:"",
+      min:0,
+      curid:this.data.curid
+    });
+    this.play(this.data.curid);
+ 
+  },
+  list:function(){
+      this.actionSheetChange();
+  },
+  bindItemTap:function(e){
+      var curid=e.target.dataset.curid;
+      this.setData({
+          curid:curid
+      });
+    var arr=this.data.recentMusic;
+    this.updateStorage(this.data.curid);
+    clearInterval(this.data.timer);
+  var music=arr[this.data.curid];
+    this.setData({
+      name:music.name,
+      src:music.src,
+      author:music.author,
+      poster:music.poster,
+      playTime:"",
+      min:0,
+      curid:this.data.curid
+    });
+    this.play(this.data.curid);
   },
   _progressTimer:function(){
     var that=this;

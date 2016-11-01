@@ -7,7 +7,7 @@
     <view class="item" bindtap="recent">
         <image src='./resources/recent.png' ></image>
     最近播放
-         <text class="item-info">{{}} ></text>
+         <text class="item-info">{{recentPlay}} ></text>
     </view>
     <view class="item" bindtap="iNew">
         <image src='./resources/iNew.png' ></image>
@@ -15,17 +15,24 @@
          <text class="item-info">{{listNum}} ></text>
     </view>
     <block wx:for="{{songList}}" wx:for-item="item">
-        <template is="msgItem" data="{{item,animationData}}"/>
+        <template is="msgItem" data="{{item,animationData,index}}"/>
     </block>
 </view>
 
 <template name="msgItem">
   <view  class="songList" bindtap="openList" data-name="{{item.name}}">
-    <image class="songList-img"></image>
+    <image class="songList-img" src="{{item.poster}}"></image>
     <view class="songList-text">
         <text> {{item.name}} </text>
         <text> {{item.len}}首 已下载{{index}}首 </text>
     </view>
-    
+    <view class="more" catchtap="handleMore" data-id="{{index}}">
+        <image style="width:100%; height: 100%;" src="resources/more.png"></image>
+    </view>
   </view>
 </template>
+<action-sheet hidden="{{actionSheetHidden}}" bindchange="actionSheetChange">
+    <action-sheet-item  bindtap="delTap" >删除歌单</action-sheet-item>
+    <action-sheet-item  bindtap="renameTap">重命名</action-sheet-item>
+    <action-sheet-cancel class="cancel">取消</action-sheet-cancel>
+</action-sheet> 
