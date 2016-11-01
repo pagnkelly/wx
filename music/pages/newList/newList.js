@@ -6,9 +6,9 @@ Page({
     hid:true,
     hid2:true,
     hid3:true,
-    songList:{},
-    inputValue:'',
-    curName:''
+    songList:{},//歌单列表
+    inputValue:'',//输入内容
+    curName:''//如果要重命名，获取当前名字
   },
   onLoad: function (options) {
       this.setData({
@@ -29,6 +29,7 @@ Page({
       })
 
   },
+  //提交事件
   handleSub:function(){
     var obj=this.data.songList;
     var inputValue=this.data.inputValue;
@@ -105,6 +106,7 @@ Page({
     }
        
   },
+  //失去焦点事件，获取输入内容
   handleBlur:function(e){
       this.setData({
         inputValue: e.detail.value

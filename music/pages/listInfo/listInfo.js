@@ -7,14 +7,14 @@ Page({
     actionSheetHidden: true,
     actionSheetHidden2:true,
     hidden:true,
-    music:[],
-    currentid:99999,
-    songList:{},
-    songListName:[],
+    music:[],//歌曲列表
+    currentid:99999,//最近播放的id
+    songList:{},//歌单列表
+    songListName:[],//歌单名字列表
     hid:true,
     hid2:true,
-    name:'',
-    poster:''
+    name:'',//歌单名字
+    poster:''//主图
   },
   //事件处理函数
   onLoad: function (options) {
@@ -40,7 +40,7 @@ Page({
     })
    
   },
- 
+  //歌曲播放tap事件
   handleCell:function(e){
     var id=e.target.dataset.id;
      
@@ -49,6 +49,7 @@ Page({
    });
     
   },
+  //更多操作tap事件
   handleMore:function(e){
 
      var value = wx.getStorageSync('songList')
@@ -79,6 +80,7 @@ Page({
       actionSheetHidden2: !this.data.actionSheetHidden2
     })
   },
+   //收藏更多单击事件
   collectionTap:function(e){
        
       this.setData({
@@ -87,6 +89,7 @@ Page({
         
       })
   },
+  //新建歌单tap事件
   newSongList:function(){
       this.setData({
         actionSheetHidden2: !this.data.actionSheetHidden2
@@ -95,6 +98,7 @@ Page({
           url:'../newList/newList?id='+this.data.currentid
       })
   },
+  //增加到歌单里
   handleAdd:function(e){
     var name=e.target.dataset.name;
     var list=this.data.songList[name];

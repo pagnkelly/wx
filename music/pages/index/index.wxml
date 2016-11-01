@@ -1,6 +1,7 @@
 <!--index.wxml-->
 
 <scroll-view scroll-y="true" class="main" bindscrolltolower="onPullDownRefresh">
+<!-- 歌曲list-->
     <block wx:for="{{music}}">
         <view class="cell" bindtap="handleCell" data-id="{{index}}">
             <view class="info">
@@ -13,6 +14,7 @@
         </view>
        
     </block>
+    <!--more-->
      <action-sheet hidden="{{actionSheetHidden}}" bindchange="actionSheetChange">
         
             <action-sheet-item class="item" bindtap="collectionTap" >收藏到歌单</action-sheet-item>

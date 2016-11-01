@@ -2,14 +2,12 @@ var song=require("../../libraries/song.js");
 
 Page({
   data: {
-    animationData: {},
-    animation:'',
-    songList:[],
-    flag:false,
-    curId:'',
+    songList:[],//歌曲列表
+    flag:false,//用于歌曲列表单的打开闭合
+    curId:'',//最近播放id
     actionSheetHidden: true,
-    listNum:0,
-    curName:''
+    listNum:0,//列表数量
+    curName:''//重命名名字
   },
   onLoad: function () {
       var value = wx.getStorageSync('songList');
@@ -24,11 +22,11 @@ Page({
            recentPlay: recentPlay.length,
            listNum:count
       });
-     
   },
   onShow:function(){
       this.spread();
   },
+  //最近播放列表
   recent:function(){
 
     wx.navigateTo({
@@ -36,6 +34,7 @@ Page({
     })
 
   },
+  //歌单单击事件
   iNew:function(){
     this.setData({
       flag:!this.data.flag
@@ -47,6 +46,7 @@ Page({
     }
           
   },
+  //歌单展开
   spread:function(){
      var value = wx.getStorageSync('songList');
     
@@ -66,11 +66,13 @@ Page({
         
         
   },
+  //歌单闭合
   close:function(){
        this.setData({
               songList:[]
         })
   },
+  //选择歌单的tap事件
   openList:function(e){
     var name=e.currentTarget.dataset.name;
     wx.navigateTo({
@@ -91,6 +93,7 @@ Page({
        actionSheetHidden: !this.data.actionSheetHidden
     })
   },
+  //删除歌单
   delTap:function(e){
       var list=this.data.songList;
       var id=parseInt(this.data.curId);
@@ -121,6 +124,7 @@ Page({
         data: value
       })
   },
+  //重命名
   renameTap:function(e){
       var list=this.data.songList;
       var id=parseInt(this.data.curId);
