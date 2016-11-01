@@ -9,7 +9,7 @@
             <text class="userinfo-nickname">{{userInfo.nickName}}</text></view>
         </view>
     </view>
-    <view class="playAll clearfix">
+    <view class="playAll clearfix" bindtap="playAll">
         <image src="resources/playall.png" ></image>
         <text>播放全部</text>        
     </view>
@@ -28,7 +28,6 @@
        
     </block>
      <action-sheet hidden="{{actionSheetHidden}}" bindchange="actionSheetChange">
-        
             <action-sheet-item class="item" bindtap="collectionTap" >收藏到歌单</action-sheet-item>
             <action-sheet-item class="item" bindtap="bindItemTap" >下载</action-sheet-item>
             <action-sheet-item class="item" bindtap="bindItemTap" >分享</action-sheet-item>

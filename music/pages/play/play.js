@@ -21,22 +21,47 @@ Page({
     recentMusic:[],//最近播放歌曲详细信息
     curid:99999,//最近播放id
     actionSheetHidden:true,
-    judgeNext:false//判断是tap的下一曲，还是播放完之后的下一曲，
+    judgeNext:false,//判断是tap的下一曲，还是播放完之后的下一曲，
+    flag:false//全部播放flag
   },
   onLoad:function(options){
     // 页面初始化 options为页面跳转所带来的参数
     var that=this;
-    if(options.id){
+    
       //更新歌曲信息
-      var music=song.getById(options.id);
-      this._updateStorage(options.id);
+      if(options.name){
+        var list=wx.getStorageSync('songList');
+        var arr=[];
+        for(var i=0;i<list[options.name].length;i++){
+            arr.push(song.music[list[options.name][i]]);
+        }
+        var music=arr[0];
+        this.setData({
+            curid:0,
+            recentMusic:arr,
+            flag:true,
+            recentPlay:list[options.name]
+        });
+        this._updateStorage(list[options.name][0]);
+      }else{
+        var music=song.getById(options.id);
+        this._updateStorage(options.id);
+        //存歌曲信息
+        var arr2=[];
+        for(var i=this.data.recentPlay.length-1;i>=0;i--){
+            arr2.push(song.music[this.data.recentPlay[i]])
+        }
+        this.setData({
+            curid:0,
+            recentMusic:arr2
+        });
+      }
+      
       this.data.name=music.name;
       this.data.src=music.src;
       this.data.author=music.author;
       this.data.poster=music.poster;
-    }else{
-      wx.navigateBack();
-    }
+    
     //播放
     that.play(options.id);
     //监听播放完成
@@ -44,19 +69,17 @@ Page({
           that.data.judgeNext=true;
           that.next();
     });
-   //存歌曲信息
-      var arr2=[];
-      for(var i=this.data.recentPlay.length-1;i>=0;i--){
-          arr2.push(song.music[this.data.recentPlay[i]])
-      }
-      this.setData({
-          curid:0,
-          recentMusic:arr2
-      });
+    console.log(this.data.recentPlay);
   },
   //更新最近播放表单
   _updateStorage:function(id){
-    var recentPlay=wx.getStorageSync('recentPlay');
+    
+    if(!this.data.flag){
+      var recentPlay=wx.getStorageSync('recentPlay');
+    }else{
+      var recentPlay=this.data.recentPlay;
+    }
+      
       var arr=[];
       if(!recentPlay){
         arr.push(id);
@@ -190,11 +213,12 @@ Page({
   prev:function(){
     var that=this;
     var arr=this.data.recentMusic;
-    this.data.curid=this.data.curid+1;
-    if(this.data.curid==this.data.recentPlay.length){
-      this.data.curid=0;
+    this.data.curid=this.data.curid-1;
+   
+    if(this.data.curid==-1){
+      this.data.curid=this.data.recentPlay.length-1;
     }
-    this._updateStorage(this.data.curid);
+    this._updateStorage(this.data.recentPlay[this.data.curid]);
     clearInterval(this.data.timer);
   var music=arr[this.data.curid];
  
@@ -212,6 +236,7 @@ Page({
   },
   //下一曲
   next:function(){
+    
     var that=this;
     var arr=this.data.recentMusic;
     if(this.data.mode=="random"){
@@ -220,12 +245,15 @@ Page({
       this.data.curid=this.data.curid;
       this.data.judgeNext=false;
     }else{
-      this.data.curid=this.data.curid-1;
+      this.data.curid=this.data.curid+1;
     }
-    if(this.data.curid==-1){
-      this.data.curid=this.data.recentPlay.length-1;
+   
+    if(this.data.curid==this.data.recentPlay.length){
+      this.data.curid=0;
     }
-    this._updateStorage(this.data.curid);
+     console.log(this.data.recentPlay);
+    console.log(this.data.curid);
+    this._updateStorage(this.data.recentPlay[this.data.curid]);
     clearInterval(this.data.timer);
   var music=arr[this.data.curid];
  
@@ -252,7 +280,7 @@ Page({
           curid:curid
       });
     var arr=this.data.recentMusic;
-    this._updateStorage(this.data.curid);
+    this._updateStorage(this.data.recentPlay[this.data.curid]);
     clearInterval(this.data.timer);
   var music=arr[this.data.curid];
     this.setData({

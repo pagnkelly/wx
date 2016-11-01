@@ -135,6 +135,11 @@ Page({
               hid2:true
             });
      },1000)
+  },
+  playAll:function(){
+        wx.navigateTo({
+          url:'../play/play?name='+this.data.name
+      })
   }
 
 })
